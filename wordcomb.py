@@ -69,22 +69,21 @@ def increment_idx(poolidx, maxidx):
     """
     Increments the pool indexes. 
     """
-    if not poolidx:
-        return False
+    try:
+        poolidx[0] += 1
+        if poolidx[0] <= maxidx:
+            return poolidx
+    except:         # index out of range, list empty
+        return []
 
-    poolidx[0] += 1
-    if poolidx[0] <= maxidx:        # no need to update others
-        return poolidx
-
-    updated = False
-    i = 1
-    while (i < len(poolidx)) and (not updated):     # update others
+    update = False
+    for i in range(1, len(poolidx)):
         if poolidx[i] < maxidx:
             poolidx[i] += 1
             poolidx[0:i] = [0] * i
-            updated = True
-        i += 1
-    return poolidx if updated else False
+            update = True
+            break
+    return poolidx if update else []
 
 
 def substitute(string, subidx, pool, poolidx):
@@ -121,4 +120,5 @@ if __name__ == "__main__":
         print("[+] Total time taken: %s" %(datetime.now() - start))
         print("[+] Total words:      %s" %counter)
         print("[+] Pool size:        %s" %len(pool))
+        print("[+] Pool:             %s" %pool)
 
